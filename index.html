@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nikolaos Kallenos | Architecture & 3D Visualization</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-color: #0f1014;
+            --text-color: #f0f0f0;
+            
+            /* UPDATED: Desaturated Architectural Olive/Sage Green (Sampled from image) */
+            --accent-color: #748C5B; 
+            
+            --glass-bg: rgba(20, 20, 25, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --card-hover: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 16, 20, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            letter-spacing: 1px;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* --- HERO SECTION --- */
+        header {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            padding-top: 60px;
+            overflow: hidden;
+        }
+
+        /* Video Styles */
+        #video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); 
+            z-index: -1;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Profile Image Style */
+        .profile-img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--accent-color);
+            /* UPDATED: Shadow RGB (116, 140, 91) */
+            box-shadow: 0 0 30px rgba(116, 140, 91, 0.4);
+            margin-bottom: 25px;
+            animation: fadeInDown 1s ease-out;
+            background-color: #222;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #e0e0e0;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+            animation: fadeInUp 1s ease-out 0.3s backwards;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            animation: fadeInUp 1s ease-out 0.6s backwards;
+        }
+
+        .btn:hover {
+            background: var(--accent-color);
+            color: #fff;
+            /* UPDATED: Shadow */
+            box-shadow: 0 0 20px rgba(116, 140, 91, 0.5);
+        }
+
+        /* --- SECTIONS COMMON --- */
+        section {
+            padding: 100px 10%;
+            min-height: 80vh;
+            background-color: var(--bg-color); 
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--accent-color);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 2px;
+            background: #fff;
+            margin-top: 10px;
+        }
+
+        /* --- ABOUT --- */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            color: #ddd;
+            text-align: justify;
+        }
+
+        /* --- SKILLS --- */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .skill-tag {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: transform 0.3s;
+        }
+
+        .skill-tag:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            /* UPDATED: Background tint */
+            background: rgba(116, 140, 91, 0.2);
+        }
+
+        /* --- EXPERIENCE TIMELINE --- */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background-color: var(--glass-border);
+            top: 0;
+            bottom: 0;
+            left: 0;
+            margin-left: -1px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background: inherit;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            left: -8px;
+            background-color: var(--accent-color);
+            border: 4px solid var(--bg-color);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .content-card {
+            padding: 20px 30px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .content-card:hover {
+            background: var(--card-hover);
+            transform: translateX(5px);
+        }
+
+        .date {
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        /* --- NEW: PROFESSIONAL INFO & CANVA SECTION --- */
+        .eidos-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .eidos-card {
+            background: linear-gradient(135deg, rgba(20,20,25,0.9), rgba(40,40,45,0.9));
+            padding: 30px;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 5px;
+        }
+
+        .eidos-title {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .client-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .client-box {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .client-box:hover {
+            /* UPDATED: Background tint */
+            background: rgba(116, 140, 91, 0.2);
+        }
+
+        .canva-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            background: linear-gradient(45deg, #00C4CC, #7D2AE8); /* Canva Colors */
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .canva-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 196, 204, 0.4);
+        }
+
+        /* --- PROJECTS GALLERY (MASONRY/PINTEREST STYLE) --- */
+        .gallery {
+            column-count: 3;
+            column-gap: 20px;
+        }
+
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+            break-inside: avoid;
+            width: 100%;
+            display: inline-block;
+        }
+
+        .project-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .project-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .project-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+
+        /* --- MODAL (LIGHTBOX) STYLES --- */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; 
+            z-index: 2000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.85); /* Black w/ transparency */
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: fadeIn 0.3s ease-out;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 80vh;
+            border: 2px solid var(--accent-color);
+            border-radius: 5px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            animation: zoomIn 0.3s ease-out;
+        }
+
+        .modal-caption {
+            margin-top: 20px;
+            color: #f0f0f0;
+            font-size: 1.2rem;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            z-index: 2001;
+        }
+
+        .close-modal:hover,
+        .close-modal:focus {
+            color: var(--accent-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        @keyframes zoomIn {
+            from {transform: scale(0.7); opacity: 0;}
+            to {transform: scale(1); opacity: 1;}
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        /* --- CONTACT --- */
+        .contact-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            font-size: 2rem;
+            color: #fff;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .social-link:hover {
+            color: var(--accent-color);
+            transform: translateY(-5px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: #0f1014;
+            border-top: 1px solid var(--glass-border);
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* --- ANIMATION CLASSES --- */
+        .hidden {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease;
+        }
+
+        .show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1024px) {
+            .gallery { column-count: 2; }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .about-grid { grid-template-columns: 1fr; }
+            nav { padding: 20px; }
+            .nav-links { display: none; }
+            .gallery { column-count: 1; }
+            .modal-content { max-width: 95%; max-height: 60vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">NIKOLAOS KALLENOS</div>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#experience">Experience</a>
+            <a href="#projects">Work</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <header>
+        <video autoplay muted loop playsinline id="video-bg">
+            <source src="background.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+
+        <div class="header-content">
+            <img src="IMG_4907.jpeg" alt="Nikolaos Kallenos" class="profile-img">
+            <h1>Nikolaos Kallenos</h1>
+            <p class="subtitle">Architecture Student | 3D Digital Artist | Designer</p>
+            <a href="#projects" class="btn">View Portfolio</a>
+        </div>
+    </header>
+
+    <section id="about">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-grid hidden">
+            <div class="about-text">
+                <p>I am a fifth-year Architecture student at the University of Cyprus with a strong focus on architectural visualization as a tool for design thinking and communication. I am driven by the challenge of translating architectural concepts into precise, atmospheric, and meaningful visual narratives.</p>
+                <p>With a critical eye for drawing, spatial composition, and structural logic, I develop architecture and visualization projects that balance conceptual clarity with visual impact. My work explores the intersection of design intent and representation, using visualization not only to present ideas, but to refine and test them throughout the design process.</p>
+                <br>
+                <h3>Technical Skills</h3>
+                <div class="skills-container">
+                    <span class="skill-tag">3ds Max</span>
+                    <span class="skill-tag">Corona Render</span>
+                    <span class="skill-tag">V-Ray</span>
+                    <span class="skill-tag">Rhino 3D</span>
+                    <span class="skill-tag">Adobe Photoshop</span>
+                    <span class="skill-tag">Artificial Intelligence</span>
+                    <span class="skill-tag">Unreal Engine</span>
+                    <span class="skill-tag">D5 Render</span>
+                    <span class="skill-tag">AutoCAD</span>
+                </div>
+            </div>
+            <div class="about-img">
+                <img src="4 for post.jpg" alt="Architectural Concept" style="width:100%; border-radius:10px; opacity:0.9;">
+            </div>
+        </div>
+    </section>
+
+    <section id="experience">
+        <h2 class="section-title">Experience & Education</h2>
+        <div class="timeline hidden">
+            
+            <div class="timeline-item">
+                <div class="content-card">
+                    <span class="date">Sept 2021 - Present</span>
+                    <h3>Architecture Student</h3>
+                    <h4>University of Cyprus</h4>
+                    <p>Currently in 5th Year. Developing critical thinking and advanced drawing skills.</p>
+                </div>s
+            </div>
+            <div class="timeline-item">
+                <div class="content-card">
+                    <span class="date">Jan 2023 - Present</span>
+                    <h3>Freelance 3D Digital Artist</h3>
+                    <p>External collaborations with architects. Production of 3D models, 3D renderings, and interactive virtual tours.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="content-card">
+                    <span class="date">Jun 2023 - Aug 2023</span>
+                    <h3>Architect</h3>
+                    <h4>Andreas Markou Architects – Nicosia</h4>
+                    <p>Focus on 3D modelling and building design.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="content-card">
+                    <span class="date">Jun 2019</span>
+                    <h3>Interior Architectural Designer (Intern)</h3>
+                    <h4>LKX Exclusive Designs</h4>
+                    <p>Summer internship focused on interior design concepts.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- NEW SECTION: PROFESSIONAL PORTFOLIO & CLIENTS -->
+    <section id="professional-portfolio">
+        <h2 class="section-title">Professional Projects & Collaborations</h2>
+        
+        <div class="eidos-container hidden">
+            <!-- Eidos Studio Card -->
+            <div class="eidos-card">
+                <h3 class="eidos-title">Freelance Projects</h3>
+                <p>Specializing in high-end architectural visualization, I collaborate with architects and developers to bring unbuilt spaces to life. My professional work focuses on creating photo-realistic renderings, 3D animations, and virtual reality experiences that communicate the essence of architectural design.</p>
+                
+                <a href="https://eidos-3d-studio.my.canva.site/copy-of-nikolaos-kallenos" target="_blank" class="canva-btn">
+                    <!-- Simple SVG icon for generic design/Canvas -->
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="white"/>
+                        <path d="M11 7H13V15H11V7ZM11 17H13V19H11V17Z" fill="white"/>
+                    </svg>
+                    View Professional Portfolio on Canva
+                </a>
+            </div>
+
+            <!-- Collaborators / Websites -->
+            <div class="eidos-card">
+                <h3 class="eidos-title">Websites & Clients Collaborated</h3>
+                <div class="client-grid">
+                    <div class="client-box">
+                        <a href="https://gerolatsitis.com/el/" style="text-decoration:none; color:inherit;">
+                            <h4>Gerolatsitis</h4>
+                        </a>
+                    </div>
+                    <div class="client-box">
+                        <a href="https://papanicolaou.com.cy" style="text-decoration:none; color:inherit;">
+                            <h4>Papanicolaou</h4>
+                        </a>
+                    </div>
+                    <div class="client-box">
+                        <a href="https://www.andreadematteis.it/" style="text-decoration:none; color:inherit;">
+                            <h4>Andrea De Matteis</h4>
+                        </a>
+                    </div>
+                     <div class="client-box">
+                        <a href="https://nfkdomus.com/" style="text-decoration:none; color:inherit;">
+                            <h4>NFK Domus</h4>
+                        </a>
+                    </div>
+                    <div class="client-box">
+                        <a href="https://dks3.com/" style="text-decoration:none; color:inherit;">
+                            <h4>DKS3</h4>
+                        </a>
+                    </div>
+                    <div class="client-box">
+                        <a href="https://www.chocokingcy.com/" style="text-decoration:none; color:inherit;">
+                            <h4>Choco King</h4>
+                        </a>
+                    </div>
+                    <div class="client-box">
+                        <a style="text-decoration:none; color:inherit;">
+                            <h4>Istos</h4>
+                        </a>
+                    </div>
+                     <div class="client-box">
+                        <a style="text-decoration:none; color:inherit;">
+                            <h4>Michalis Psaras</h4>
+                        </a>
+                    </div>
+                    <div class="client-box">
+                        <a style="text-decoration:none; color:inherit;">
+                            <h4>Kyriaki Kosta</h4>
+                        </a>
+                    </div>        
+                    <div class="client-box">
+                        <a style="text-decoration:none; color:inherit;">
+                            <h4>Architexture Design Studio</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2 class="section-title">Selected Works</h2>
+        <p style="margin-bottom: 30px; color: #aaa;">A collection of architectural visualizations, 3D models, and design concepts. Click on any image to enlarge.</p>
+        
+        <!-- MASONRY GALLERY (Pinterest Style) -->
+        <div class="gallery hidden">
+            
+            <!-- Aerial / Wide -->
+            <div class="project-card">
+                <img src="aerial for post.jpg" alt="Aerial Concept - Overall Visualization" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Aerial Concept</h3>
+                    <p>Overall Visualization</p>
+                </div>
+            </div>
+            <!-- Tall Portrait -->
+            <div class="project-card">
+                <img src="ex2 final.jpg" alt="Exterior Facade - Natural Lighting" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Exterior Facade</h3>
+                    <p>Natural Lighting</p>
+                </div>
+            </div>
+
+            <!-- Wide/Square -->
+            <div class="project-card">
+                <img src="1 for post.jpg" alt="Architectural Competition - Overall Visualization" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Architectural Competition</h3>
+                    <p>Overall Visualization</p>
+                </div>
+            </div>
+
+            <!-- Tall Portrait -->
+            <div class="project-card">
+                <img src="ex10 final copy.jpg" alt="Exterior Facade - Artificial Lighting" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Exterior Facade</h3>
+                    <p>Artificial Lighting</p>
+                </div>
+            </div>
+
+            <!-- Tall Portrait -->
+            <div class="project-card">
+                <img src="1 int for post.jpg" alt="Interior Detail - Competition" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Interior Detail</h3>
+                    <p>Architectural Competition</p>
+                </div>
+            </div>
+
+            <!-- Tall Portrait -->
+            <div class="project-card">
+                <img src="3 int for post.jpg" alt="Living Space - Shared Balcony" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Living Space</h3>
+                    <p>Shared Balcony</p>
+                </div>
+            </div>
+
+            <!-- Tall Portrait -->
+            <div class="project-card">
+                <img src="int6.jpg" alt="Interior Mood - Lighting Study" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Interior Mood</h3>
+                    <p>Lighting Study</p>
+                </div>
+            </div>
+
+            <!-- Tall Portrait -->
+            <div class="project-card">
+                <img src="int3.jpg" alt="Modern Interior - Design Concept" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Modern Interior</h3>
+                    <p>Design Concept</p>
+                </div>
+            </div>
+            
+            <!-- Wide -->
+            <div class="project-card">
+                <img src="final bathroom 1.png" alt="Bathroom Detail - Material Study" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Bathroom Detail</h3>
+                    <p>Material Study</p>
+                </div>
+            </div>
+
+            <!-- Wide -->
+            <div class="project-card">
+                <img src="final bedroom 2.png" alt="Bedroom Design - Interior Render" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Bedroom Design</h3>
+                    <p>Interior Render</p>
+                </div>
+            </div>
+
+            <!-- Tall Portrait -->
+            <div class="project-card">
+                <img src="10 post.jpg" alt="Dining Table - Eye-Level Feeling" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Dining Table</h3>
+                    <p>Eye-Level Feeling</p>
+                </div>
+            </div>
+
+            <!-- Tall Portrait -->
+            <div class="project-card">
+                <img src="3 post.jpg" alt="Living Room - Atmosphere Study" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Living Room</h3>
+                    <p>Atmosphere Study</p>
+                </div>
+            </div>
+
+            <!-- Tall Portrait -->
+            <div class="project-card">
+                <img src="9 post.jpg" alt="Dining Area - Cozy Feeling" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Dining Area</h3>
+                    <p>Cozy Feeling</p>
+                </div>
+            </div>
+
+            <!-- Tall Portrait -->
+            <div class="project-card">
+                <img src="2 post.jpg" alt="Residential Block - Exterior View" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Residential Block</h3>
+                    <p>Exterior View</p>
+                </div>
+            </div>
+
+             <!-- Tall Portrait -->
+             <div class="project-card">
+                <img src="5.jpg" alt="Bedroom - Atmosphere Study" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Bedroom</h3>
+                    <p>Atmosphere Study</p>
+                </div>
+            </div>
+
+            <!-- Ultra Wide -->
+            <div class="project-card">
+                <img src="11.png" alt="Roofgarden - Terrace View" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Roofgarden</h3>
+                    <p>Terrace View</p>
+                </div>
+            </div>
+
+            <!-- Ultra Wide -->
+            <div class="project-card">
+                <img src="4.png" alt="Side View - Artificial Lighting" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Side View</h3>
+                    <p>Artificial Lighting</p>
+                </div>
+            </div>
+
+            <!-- Ultra Wide -->
+            <div class="project-card">
+                <img src="10.png" alt="Exterior Details - Close-up View" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Exterior Details</h3>
+                    <p>Close-up View</p>
+                </div>
+            </div>
+
+            <!-- Ultra Wide -->
+            <div class="project-card">
+                <img src="final H1.png" alt="Housing Complex - Exterior Visualization" loading="lazy" decoding="async">
+                <div class="project-overlay">
+                    <h3>Housing Complex</h3>
+                    <p>Exterior Visualization</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- IMAGE MODAL CONTAINER -->
+    <div id="image-modal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modal-img">
+        <div id="caption" class="modal-caption"></div>
+    </div>
+
+    <section id="contact">
+        <h2 class="section-title">Get In Touch</h2>
+        <div class="hidden" style="text-align: center;">
+            <p style="font-size: 1.2rem; margin-bottom: 30px;">Currently open for collaborations and architectural projects.</p>
+            
+            <div class="contact-container">
+                <a href="mailto:nikolaskallenos02@gmail.com" class="social-link" title="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <a href="https://www.instagram.com/n.kallenos/" target="_blank" class="social-link" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.facebook.com/nikolas.kallenos.75" target="_blank" class="social-link" title="Facebook">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/nikolaos-kallenos-0bb891354" target="_blank" class="social-link" title="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+            </div>
+
+            <div style="margin-top: 50px; color: #888;">
+                <p><i class="fas fa-phone"></i> (+357) 97640886</p>
+                <p><i class="fas fa-map-marker-alt"></i> Nicosia, Cyprus</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Nikolaos Kallenos. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- 1. SLOW DOWN VIDEO AFTER 44 SECONDS ---
+        const video = document.getElementById('video-bg');
+
+        if(video) {
+            video.addEventListener('timeupdate', function() {
+                // If the video time is greater than 44 seconds
+                if (this.currentTime >= 44) {
+                    this.playbackRate = 0.6; // 0.6 = 60% speed. Lower is slower.
+                } else {
+                    // Reset to normal speed when it loops back to the start
+                    this.playbackRate = 1.0;
+                }
+            });
+        }
+
+        // --- 2. INTERSECTION OBSERVER FOR SCROLL ANIMATIONS ---
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, observerOptions);
+
+        const hiddenElements = document.querySelectorAll('.hidden');
+        hiddenElements.forEach((el) => observer.observe(el));
+
+        // --- 3. MODAL (LIGHTBOX) FUNCTIONALITY ---
+        const modal = document.getElementById('image-modal');
+        const modalImg = document.getElementById('modal-img');
+        const captionText = document.getElementById('caption');
+        const closeModal = document.getElementsByClassName('close-modal')[0];
+        
+        // Select all project cards
+        const projectCards = document.querySelectorAll('.project-card');
+
+        projectCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const img = this.querySelector('img');
+                const title = this.querySelector('h3').innerText;
+                const desc = this.querySelector('p').innerText;
+                
+                modal.style.display = "flex";
+                modalImg.src = img.src;
+                captionText.innerText = title + " - " + desc;
+            });
+        });
+
+        // Close when clicking the X
+        closeModal.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // Close when clicking outside the image (on the background)
+        modal.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Close when pressing ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                modal.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>
